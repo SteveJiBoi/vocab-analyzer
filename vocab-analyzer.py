@@ -170,15 +170,17 @@ def display_results(results):
             st.markdown("---")
 
 def display_test_table(tests):
-    """显示测试数据表格"""
+    """显示测试数据表格 - 修正百分比显示"""
     # 准备表格数据
     table_data = []
     for test in tests:
+        # 创建两个分开的字段 - 一个用于进度条，一个用于显示文本
         table_data.append({
             "类型": test["type"],
             "测试范围": test["range"],
             "词数": test["count"],
-            "正确率": test["accuracy_str"],
+            "正确率数值": test["accuracy"],  # 纯数字用于进度条
+            "正确率显示": test["accuracy_str"],  # 带格式的文本
             "反应时间": f"{test['time']:.2f}s",
             "错误数": test["errors"]
         })
@@ -189,12 +191,14 @@ def display_test_table(tests):
         column_config={
             "类型": st.column_config.TextColumn(width="small"),
             "测试范围": st.column_config.TextColumn(width="medium"),
-            "正确率": st.column_config.ProgressColumn(
+            "正确率数值": st.column_config.ProgressColumn(
+                "正确率",
                 min_value=0,
                 max_value=100,
                 format="%d%%",
                 width="medium"
-            )
+            ),
+            "正确率显示": None  # 隐藏重复列
         },
         hide_index=True,
         use_container_width=True
