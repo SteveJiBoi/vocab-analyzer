@@ -188,6 +188,43 @@ def display_test_table(tests):
         use_container_width=True
     )
 
+def display_test_table(tests):
+    """显示测试数据表格 - 优化星号显示"""
+    # 准备表格数据
+    table_data = []
+    for test in tests:
+        table_data.append({
+            "类型": test["type"],
+            "测试范围": test["range"],
+            "词数": test["count"],
+            "正确率": test["accuracy_str"],  # 直接使用带星号的字符串
+            "进度值": test["accuracy"],     # 纯数字用于进度条
+            "反应时间": f"{test['time']:.2f}s",
+            "错误数": test["errors"]
+        })
+    
+    # 显示表格
+    st.dataframe(
+        table_data,
+        column_config={
+            "类型": st.column_config.TextColumn(width="small"),
+            "测试范围": st.column_config.TextColumn(width="medium"),
+            "进度值": st.column_config.ProgressColumn(
+                "正确率进度",
+                min_value=0,
+                max_value=100,
+                format="%d%%",
+                width="medium"
+            ),
+            "正确率": st.column_config.TextColumn(
+                "正确率(带重试)",
+                help="*表示该测试范围未通过的次数"
+            )
+        },
+        hide_index=True,
+        use_container_width=True
+    )
+
 def display_results(results, show_failed):
     """显示分析结果 - 添加show_failed参数"""
     for student in results:
