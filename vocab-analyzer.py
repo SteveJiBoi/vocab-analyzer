@@ -45,7 +45,7 @@ def main():
         if not results:
             st.warning("没有找到符合条件的数据")
         else:
-            display_results(results)
+            display_results(results, show_failed)
             
             # Export options
             st.markdown("---")
@@ -151,23 +151,25 @@ def analyze_data(text, min_accuracy=94, show_failed=False):
     
     return results
 
-def display_results(results):
-    """显示分析结果"""
+def display_results(results, show_failed):
+    """显示分析结果 - 添加show_failed参数"""
     for student in results:
-        with st.container():
-            st.subheader(f"👤 {student['name']}")
-            
-            # 通过测试
-            if student['passed']:
-                st.markdown("✅ **通过测试**")
-                display_test_table(student['passed'])
-            
-            # 未通过测试 (如果启用显示)
-            if student['failed']:
-                st.markdown("❌ **未通过测试**")
-                display_test_table(student['failed'])
-            
-            st.markdown("---")
+        # 只有当有通过记录，或者show_failed为True且有未通过记录时才显示
+        if student['passed'] or (show_failed and student['failed']):
+            with st.container():
+                st.subheader(f"👤 {student['name']}")
+                
+                # 通过测试
+                if student['passed']:
+                    st.markdown("✅ **通过测试**")
+                    display_test_table(student['passed'])
+                
+                # 未通过测试 (只有当show_failed为True时显示)
+                if show_failed and student['failed']:
+                    st.markdown("❌ **未通过测试**")
+                    display_test_table(student['failed'])
+                
+                st.markdown("---")
 
 def display_test_table(tests):
     """显示测试数据表格 - 修正百分比显示"""
