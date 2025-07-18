@@ -53,18 +53,17 @@ def main():
                 export_options(results)
 
 def analyze_data(text, min_accuracy=94, show_failed=False):
-    """核心分析函数 - 修复星号显示问题"""
+    """核心分析函数 - 添加重试次数标记"""
     def extract_test_info(test_str):
         test_type = "听测" if "听测" in test_str else "看测"
         range_match = re.search(r'(\d+~\d+)|(?<!\d)(\d+)(?!\d)', test_str)
         test_range = range_match.group() if range_match else "未知范围"
         return test_type, test_range
     
-    # 跟踪每个学生每个测试范围的历史尝试（包括通过的）
-    history = defaultdict(list)
+    # 第一次遍历：统计每个学生每个测试范围的未通过次数
+    range_attempts = defaultdict(lambda: defaultdict(int))
     student_entries = re.split(r'\n\s*\n', text.strip())
     
-    # 第一次遍历：收集所有尝试记录
     for entry in student_entries:
         if not entry:
             continue
@@ -86,9 +85,11 @@ def analyze_data(text, min_accuracy=94, show_failed=False):
                 
             accuracy = int(accuracy_match.group(1))
             test_type, test_range = extract_test_info(test_info)
-            key = (full_name, test_type, test_range)
+            key = f"{test_type}-{test_range}"
             
-            history[key].append(accuracy)
+            # 记录每次未通过的尝试
+            if accuracy < min_accuracy:
+                range_attempts[full_name][key] += 1
     
     # 第二次遍历：生成结果
     results = []
@@ -113,9 +114,9 @@ def analyze_data(text, min_accuracy=94, show_failed=False):
                 continue
                 
             test_type, test_range = extract_test_info(test_info)
-            key = (full_name, test_type, test_range)
+            key = f"{test_type}-{test_range}"
             
-            # 提取当前测试数据
+            # 提取各项数据
             word_count = re.search(r'词数：(\d+)', test)
             accuracy = re.search(r'正确率：(\d+)%', test)
             time = re.search(r'平均反应时间：([\d.]+)\s*s', test)
@@ -127,13 +128,8 @@ def analyze_data(text, min_accuracy=94, show_failed=False):
                 reaction_time = float(time.group(1))
                 errors = int(errors.group(1))
                 
-                # 计算该测试范围的未通过次数（当前尝试之前的失败次数）
-                previous_attempts = history.get(key, [])
-                failed_attempts = sum(1 for a in previous_attempts if a < min_accuracy)
-                
-                # 如果是当前尝试且未通过，需要减1（因为当前尝试还未加入history）
-                if accuracy_val < min_accuracy:
-                    failed_attempts = max(0, failed_attempts - 1)
+                # 获取该测试范围的未通过次数
+                attempts = range_attempts[full_name].get(key, 0)
                 
                 test_data = {
                     "type": test_type,
@@ -142,7 +138,7 @@ def analyze_data(text, min_accuracy=94, show_failed=False):
                     "accuracy": accuracy_val,
                     "time": reaction_time,
                     "errors": errors,
-                    "accuracy_str": f"{accuracy_val}%{'*' * failed_attempts}"
+                    "accuracy_str": f"{accuracy_val}%{'*' * attempts}"  # 添加星号标记
                 }
                 
                 if accuracy_val >= min_accuracy:
@@ -155,43 +151,44 @@ def analyze_data(text, min_accuracy=94, show_failed=False):
     
     return results
 
-
 def display_test_table(tests):
-    """显示测试数据表格 - 确保星号可见"""
+    """显示测试数据表格 - 优化星号显示"""
     # 准备表格数据
     table_data = []
     for test in tests:
         table_data.append({
-            "测试类型": test["type"],
-            "范围": test["range"],
+            "类型": test["type"],
+            "测试范围": test["range"],
             "词数": test["count"],
-            "正确率": test["accuracy_str"],  # 直接显示带星号的字符串
-            "进度": test["accuracy"],       # 用于进度条的数字
+            "正确率": test["accuracy_str"],  # 直接使用带星号的字符串
+            "进度值": test["accuracy"],     # 纯数字用于进度条
             "反应时间": f"{test['time']:.2f}s",
             "错误数": test["errors"]
         })
     
-    # 显示表格 - 使用更清晰的列配置
+    # 显示表格
     st.dataframe(
         table_data,
         column_config={
-            "进度": st.column_config.ProgressColumn(
+            "类型": st.column_config.TextColumn(width="small"),
+            "测试范围": st.column_config.TextColumn(width="medium"),
+            "进度值": st.column_config.ProgressColumn(
                 "正确率进度",
                 min_value=0,
                 max_value=100,
                 format="%d%%",
-                help="进度条显示实际百分比"
+                width="medium"
             ),
             "正确率": st.column_config.TextColumn(
                 "正确率(带重试)",
-                help="*号表示之前未通过的次数"
+                help="*表示该测试范围未通过的次数"
             )
         },
         hide_index=True,
-        use_container_width=True,
-        height=(len(table_data) * 35 + 38)  # 更好的行高
+        use_container_width=True
     )
 
+    
 def display_results(results, show_failed):
     """显示分析结果 - 添加show_failed参数"""
     for student in results:
