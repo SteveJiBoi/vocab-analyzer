@@ -214,8 +214,8 @@ def display_question_cards(cards, card_type):
         st.markdown(f"""
         <div class="question-card {card_class}">
             <b>{card['name']}</b> - {card['status']}<br>
-            初次: {card['initial_wrong']}/{card['total']} (正确率: {card['initial_accuracy']}%)
-            {f"<br>订正后: {card['corrected_wrong']}/{card['total']} (正确率: {card['corrected_accuracy']}%)" if card['corrected_wrong'] is not None else ""}
+            初次错题: {card['initial_wrong']}/{card['total']} (正确率: {card['initial_accuracy']}%)
+            {f"<br>订正后错题: {card['corrected_wrong']}/{card['total']} (正确率: {card['corrected_accuracy']}%)" if card['corrected_wrong'] is not None else ""}
         </div>
         """, unsafe_allow_html=True)
 
