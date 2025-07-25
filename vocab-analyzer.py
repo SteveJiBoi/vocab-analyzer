@@ -4,7 +4,7 @@ from collections import defaultdict
 
 def main():
     # Configure page
-    st.set_page_config(layout="wide", page_title="词测分析工具", page_icon="📚")
+    st.set_page_config(layout="wide", page_title="词测&练习分析工具", page_icon="📚")
     
     # Custom CSS for better styling
     st.markdown("""
@@ -27,7 +27,7 @@ def main():
     st.markdown("---")
     
     # Input section
-    with st.expander("📥 粘贴WPS云文档词测数据", expanded=True):
+    with st.expander("📥 粘贴Study系统上班级学习动态", expanded=True):
         input_data = st.text_area(
             "请粘贴如下格式的数据:",
             height=200,
@@ -37,9 +37,9 @@ def main():
     # Processing controls
     col1, col2 = st.columns(2)
     with col1:
-        min_accuracy = st.slider("通过分数线 (%)", 85, 100, 94)
+        min_accuracy = st.slider("词测通过分数线 (%)", 85, 100, 94)
     with col2:
-        show_failed = st.checkbox("显示未通过记录", value=False)
+        show_failed = st.checkbox("显示词测未通过记录", value=False)
     
     if st.button("🔍 开始分析", type="primary", use_container_width=True):
         if not input_data.strip():
