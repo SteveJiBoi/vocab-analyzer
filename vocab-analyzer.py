@@ -410,7 +410,7 @@ def main():
                     <path d="M12.8 11.8L21.18 11.8C25.66 11.8 29.2 15.34 29.2 19.82V20.18C29.2 24.66 25.66 28.2 21.18 28.2L12.8 28.2V11.8Z" fill="#FBBC05"/>
                     <path d="M12.8 11.8V28.2H7.6C3.12 28.2 -0.42 24.66 -0.42 20.18V19.82C-0.42 15.34 3.12 11.8 7.6 11.8H12.8Z" fill="#EA4335"/>
                 </svg>
-                <h1 style="margin:0; color: var(--text-color); font-weight: 500;">词测分析工具 V3.1</h1>
+                <h1 style="margin:0; color: var(--text-color); font-weight: 500;">词测&词测分析工具 V3.1</h1>
             </div>
             <p style="margin:0; color: var(--secondary-text);">分析学生词汇测试和练习数据</p>
         </div>
