@@ -106,7 +106,7 @@ def main():
             results_container = st.container()
             with results_container:
                 for student in results:
-                    if (student['passed'] or (show_failed and student['failed']) and show_vocab:
+                    if (student['passed'] or (show_failed and student['failed']) and show_vocab):
                         with st.container():
                             st.subheader(f"👤 {student['name']")
                             
