@@ -332,7 +332,7 @@ def main():
                     if (student['passed'] or (show_failed and student['failed'])) and show_vocab:
                         display_student = True
                         with st.container():
-                            st.subheader(f"👤 {student['name']")
+                            st.subheader(f"👤 {student['name']}")
                             st.markdown("📝 **词测结果**")
                             if student['passed']:
                                 st.markdown("✅ **通过测试**")
