@@ -343,7 +343,7 @@ def main():
                     
                     if (student['question_cards']['SAT'] or student['question_cards']['TOEFL']) and show_cards:
                         if not display_student:
-                            st.subheader(f"👤 {student['name']")
+                            st.subheader(f"👤 {student['name']}")
                             display_student = True
                         
                         if student['question_cards']['SAT']:
