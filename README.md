@@ -1,4 +1,4 @@
-# 词测分析工具 (Vocab Analyzer)
+# 词测&练习分析工具 (Vocab Analyzer)
 
 A web app to analyze vocabulary test results from WPS documents.
 
