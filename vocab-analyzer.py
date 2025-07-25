@@ -232,49 +232,6 @@ def export_options(results):
     if st.checkbox("显示处理后的原始数据"):
         st.json(results, expanded=False)
 
-def add_share_button():
-    """Adds a share button that copies website info to clipboard"""
-    share_text = """📚 词测&练习分析工具
-
-这是一个用于分析学生词汇测试和练习数据的可视化工具，可以：
-- 分析词汇测试的正确率、反应时间和错误数
-- 跟踪SAT/TOEFL题卡的完成情况
-- 生成可视化报告和导出数据
-
-访问链接: https://vocab-analyzer-jzdxphf8ukukuvbmhpwvam.streamlit.app/"""
-
-    if st.button("↗️ 分享工具", help="复制工具链接和功能介绍"):
-        js = f"""
-        <script>
-            async function copyToClipboard() {{
-                try {{
-                    // First clear the clipboard
-                    await navigator.clipboard.writeText('');
-                    
-                    // Then write our new content
-                    await navigator.clipboard.writeText(`{share_text}`);
-                    
-                    // Show success message
-                    alert('分享信息已复制到剪贴板！\\n\\n' + `{share_text}`);
-                }} catch (err) {{
-                    // Fallback method if Clipboard API fails
-                    try {{
-                        const textarea = document.createElement('textarea');
-                        textarea.value = `{share_text}`;
-                        document.body.appendChild(textarea);
-                        textarea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textarea);
-                        alert('分享信息已复制到剪贴板！\\n\\n' + `{share_text}`);
-                    }} catch (err) {{
-                        alert('复制失败，请手动复制。\\n错误: ' + err.message);
-                    }}
-                }}
-            }}
-            copyToClipboard();
-        </script>
-        """
-        st.components.v1.html(js, height=0, width=0)
 
 def main():
     st.set_page_config(
@@ -458,9 +415,6 @@ def main():
             <p style="margin:0; color: var(--secondary-text);">分析学生词汇测试和练习数据</p>
         </div>
         """, unsafe_allow_html=True)
-    with col2:
-        st.markdown("<div style='height: 28px'></div>", unsafe_allow_html=True)  # Vertical alignment
-        add_share_button()
     
     with st.expander("📥 粘贴Study系统上班级学习动态", expanded=True):
         input_data = st.text_area(
