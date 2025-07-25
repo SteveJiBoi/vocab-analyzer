@@ -232,10 +232,40 @@ def export_options(results):
     if st.checkbox("显示处理后的原始数据"):
         st.json(results, expanded=False)
 
+def add_share_button():
+    """Adds a share button that copies website info to clipboard"""
+    share_text = """📚 词测&练习分析工具
+
+这是一个用于分析学生词汇测试和练习数据的可视化工具，可以：
+- 分析词汇测试的正确率、反应时间和错误数
+- 跟踪SAT/TOEFL题卡的完成情况
+- 生成可视化报告和导出数据
+
+访问链接: https://vocab-analyzer-jzdxphf8ukukuvbmhpwvam.streamlit.app/"""
+
+    st.markdown("""
+    <script>
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            alert('分享信息已复制到剪贴板！\\n\\n' + text);
+        }, function() {
+            alert('复制失败，请手动复制。');
+        });
+    }
+    </script>
+    """, unsafe_allow_html=True)
+
+    if st.button("↗️ 分享工具", help="复制工具链接和功能介绍"):
+        html(f"""
+        <script>
+        copyToClipboard(`{share_text}`);
+        </script>
+        """, unsafe_allow_html=True)
+
 def main():
     st.set_page_config(
         layout="wide", 
-        page_title="词测&练习分析工具", 
+        page_title="词测&练习分析工具 V3.1", 
         page_icon="📚",
         initial_sidebar_state="expanded"
     )
@@ -296,6 +326,19 @@ def main():
     
     .stButton>button:active {
         transform: translateY(0);
+    }
+    
+    /* Secondary button style */
+    .stButton>button[kind="secondary"] {
+        background-color: var(--bg-color) !important;
+        color: var(--primary-color) !important;
+        border: 1px solid var(--border-color) !important;
+        transition: all 0.2s ease;
+    }
+
+    .stButton>button[kind="secondary"]:hover {
+        background-color: var(--hover-color) !important;
+        border-color: var(--primary-color) !important;
     }
     
     /* Progress bar animation */
@@ -384,23 +427,26 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # Google-style header with animation
-    st.markdown("""
-    <div class="header">
-        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM29.2 20.18C29.2 24.66 25.66 28.2 21.18 28.2H12.8V11.8H21.18C25.66 11.8 29.2 15.34 29.2 19.82V20.18Z" fill="#4285F4"/>
-                <path d="M12.8 11.8V28.2H21.18C25.66 28.2 29.2 24.66 29.2 20.18V19.82C29.2 15.34 25.66 11.8 21.18 11.8H12.8Z" fill="#34A853"/>
-                <path d="M12.8 11.8L21.18 11.8C25.66 11.8 29.2 15.34 29.2 19.82V20.18C29.2 24.66 25.66 28.2 21.18 28.2L12.8 28.2V11.8Z" fill="#FBBC05"/>
-                <path d="M12.8 11.8V28.2H7.6C3.12 28.2 -0.42 24.66 -0.42 20.18V19.82C-0.42 15.34 3.12 11.8 7.6 11.8H12.8Z" fill="#EA4335"/>
-            </svg>
-            <h1 style="margin:0; color: var(--text-color); font-weight: 500;">词测分析工具</h1>
+    # Header with share button
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.markdown("""
+        <div class="header">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM29.2 20.18C29.2 24.66 25.66 28.2 21.18 28.2H12.8V11.8H21.18C25.66 11.8 29.2 15.34 29.2 19.82V20.18Z" fill="#4285F4"/>
+                    <path d="M12.8 11.8V28.2H21.18C25.66 28.2 29.2 24.66 29.2 20.18V19.82C29.2 15.34 25.66 11.8 21.18 11.8H12.8Z" fill="#34A853"/>
+                    <path d="M12.8 11.8L21.18 11.8C25.66 11.8 29.2 15.34 29.2 19.82V20.18C29.2 24.66 25.66 28.2 21.18 28.2L12.8 28.2V11.8Z" fill="#FBBC05"/>
+                    <path d="M12.8 11.8V28.2H7.6C3.12 28.2 -0.42 24.66 -0.42 20.18V19.82C-0.42 15.34 3.12 11.8 7.6 11.8H12.8Z" fill="#EA4335"/>
+                </svg>
+                <h1 style="margin:0; color: var(--text-color); font-weight: 500;">词测分析工具</h1>
+            </div>
+            <p style="margin:0; color: var(--secondary-text);">可视化分析学生词汇测试和练习数据</p>
         </div>
-        <p style="margin:0; color: var(--secondary-text);">分析学生词汇测试和练习数据</p>
-    </div>
-    """, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
+    with col2:
+        add_share_button()
     
-    # Input section with subtle animation
     with st.expander("📥 粘贴Study系统上班级学习动态", expanded=True):
         input_data = st.text_area(
             "请粘贴如下格式的数据:",
@@ -409,34 +455,30 @@ def main():
             key="input_area"
         )
     
-    # Settings section with cards
     st.markdown("### 🎛️ 分析设置")
     cols = st.columns(4)
     with cols[0]:
         with st.container(border=True):
-            min_accuracy = st.slider("词测通过分数线 (%)", 85, 100, 94, help="设置词测通过的最低正确率")
+            min_accuracy = st.slider("词测通过分数线 (%)", 85, 100, 94)
     with cols[1]:
         with st.container(border=True):
-            show_failed = st.checkbox("显示词测未通过记录", value=False, help="显示未达到分数线的测试记录")
+            show_failed = st.checkbox("显示词测未通过记录", value=False)
     with cols[2]:
         with st.container(border=True):
-            show_vocab = st.checkbox("显示词测结果", value=True, help="显示词汇测试的分析结果")
+            show_vocab = st.checkbox("显示词测结果", value=True)
     with cols[3]:
         with st.container(border=True):
-            show_cards = st.checkbox("显示题卡结果", value=True, help="显示题卡练习的分析结果")
+            show_cards = st.checkbox("显示题卡结果", value=True)
     
-    # Primary action button with animation
     if st.button("🔍 开始分析", type="primary", use_container_width=True):
         if not input_data.strip():
             st.warning("请先粘贴数据!")
             st.stop()
         
-        # Animated loading sequence
         with st.spinner(""):
             progress_bar = st.progress(0)
             status_text = st.empty()
             
-            # Display loading spinner
             status_text.markdown("""
             <div style="text-align: center;">
                 <div class="loading-spinner"></div>
@@ -444,7 +486,6 @@ def main():
             </div>
             """, unsafe_allow_html=True)
             
-            # Simulate progress
             for i in range(100):
                 time.sleep(0.01)
                 progress_bar.progress(i + 1)
@@ -456,10 +497,8 @@ def main():
                     </div>
                     """, unsafe_allow_html=True)
             
-            # Actual analysis
             results = analyze_data(input_data, min_accuracy, show_failed)
             
-            # Complete animation
             progress_bar.progress(100)
             status_text.markdown("""
             <div style="text-align: center; animation: fadeIn 0.5s ease;">
@@ -473,7 +512,6 @@ def main():
             time.sleep(0.5)
             status_text.empty()
         
-        # Confetti celebration
         html("""
         <script>
         function createConfetti() {
@@ -496,7 +534,6 @@ def main():
         </script>
         """)
         
-        # Results display with animation
         results_container = st.container()
         with results_container:
             for student in results:
@@ -551,7 +588,6 @@ def main():
                 if display_student:
                     st.markdown("---")
         
-        # Auto-scroll to results
         html(f"""
         <script>
             setTimeout(() => {{
@@ -563,7 +599,6 @@ def main():
         </script>
         """)
         
-        # Export section
         st.markdown("---")
         with st.expander("📤 导出结果", expanded=False):
             export_options(results)
