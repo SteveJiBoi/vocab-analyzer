@@ -243,24 +243,19 @@ def add_share_button():
 
 访问链接: https://vocab-analyzer-jzdxphf8ukukuvbmhpwvam.streamlit.app/"""
 
-    st.markdown("""
-    <script>
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(function() {
-            alert('分享信息已复制到剪贴板！\\n\\n' + text);
-        }, function() {
-            alert('复制失败，请手动复制。');
-        });
-    }
-    </script>
-    """, unsafe_allow_html=True)
-
+    # Use Streamlit's built-in components instead of raw html()
     if st.button("↗️ 分享工具", help="复制工具链接和功能介绍"):
-        html(f"""
+        js = f"""
         <script>
-        copyToClipboard(`{share_text}`);
+            function copyToClipboard() {{
+                navigator.clipboard.writeText(`{share_text}`)
+                    .then(() => alert('分享信息已复制到剪贴板！\\n\\n' + `{share_text}`))
+                    .catch(() => alert('复制失败，请手动复制。'));
+            }}
+            copyToClipboard();
         </script>
-        """, unsafe_allow_html=True)
+        """
+        st.components.v1.html(js, height=0, width=0)
 
 def main():
     st.set_page_config(
@@ -445,6 +440,7 @@ def main():
         </div>
         """, unsafe_allow_html=True)
     with col2:
+        st.markdown("<div style='height: 28px'></div>", unsafe_allow_html=True)  # Vertical alignment
         add_share_button()
     
     with st.expander("📥 粘贴Study系统上班级学习动态", expanded=True):
