@@ -240,26 +240,6 @@ def main():
         page_icon="📚",
         initial_sidebar_state="expanded"
     )
-    st.markdown("""
-    <script>
-        // Add scroll detection
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) {
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
-            }
-        });
-        
-        // Smooth scroll to content when clicked
-        function scrollToContent() {
-            window.scrollTo({
-                top: window.innerHeight,
-                behavior: 'smooth'
-            });
-        }
-    </script>
-    """, unsafe_allow_html=True)
     
     # Google-style CSS with animations
     st.markdown("""
@@ -409,12 +389,7 @@ def main():
         animation: slideIn 0.4s ease-out;
     }
     
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .stDataFrame {
-            width: 100% !important;
-        }
-    }
+    /* Title page styles */
     .title-page {
         position: fixed;
         top: 0;
@@ -463,37 +438,103 @@ def main():
     .scrolled .main-content {
         opacity: 1;
     }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .stDataFrame {
+            width: 100% !important;
+        }
+        
+        .title-content {
+            padding: 1rem;
+        }
+        
+        .title-content h1 {
+            font-size: 2rem !important;
+        }
+    }
     </style>
     """, unsafe_allow_html=True)
     
-    # Header with share button
-    col1, col2 = st.columns([4, 1])
-    with col1:
-        st.markdown("""
-        <div class="title-page">
-            <div class="title-content">
-                <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 1rem;">
-                    <svg width="60" height="60" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM29.2 20.18C29.2 24.66 25.66 28.2 21.18 28.2H12.8V11.8H21.18C25.66 11.8 29.2 15.34 29.2 19.82V20.18Z" fill="#4285F4"/>
-                        <path d="M12.8 11.8V28.2H21.18C25.66 28.2 29.2 24.66 29.2 20.18V19.82C29.2 15.34 25.66 11.8 21.18 11.8H12.8Z" fill="#34A853"/>
-                        <path d="M12.8 11.8L21.18 11.8C25.66 11.8 29.2 15.34 29.2 19.82V20.18C29.2 24.66 25.66 28.2 21.18 28.2L12.8 28.2V11.8Z" fill="#FBBC05"/>
-                        <path d="M12.8 11.8V28.2H7.6C3.12 28.2 -0.42 24.66 -0.42 20.18V19.82C-0.42 15.34 3.12 11.8 7.6 11.8H12.8Z" fill="#EA4335"/>
-                    </svg>
-                    <h1 style="margin:0; color: var(--text-color); font-size: 2.5rem; font-weight: 500;">词测&练习分析工具 V3.1</h1>
-                </div>
-                <p style="color: var(--secondary-text); font-size: 1.2rem; margin-bottom: 2rem;">分析学生词汇测试和练习数据</p>
-                <button onclick="scrollToContent()" style="pointer-events: auto; background: var(--primary-color); color: white; border: none; padding: 0.8rem 2rem; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: all 0.2s ease;">开始使用</button>
-            </div>
-            <div class="scroll-prompt" onclick="scrollToContent()" style="pointer-events: auto; cursor: pointer;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 10L12 15L17 10H7Z" fill="var(--secondary-text)"/>
+    # Title page with scroll detection
+    st.markdown("""
+    <script>
+        // Add scroll detection
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scroll to content when clicked
+        function scrollToContent() {
+            window.scrollTo({
+                top: window.innerHeight,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#4285F4', '#34A853', '#FBBC05', '#EA4335', '#8AB4F8'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 8 + 4) + 'px';
+                confetti.style.height = confetti.style.width;
+                confetti.style.borderRadius = '50%';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+    </script>
+    
+    <div class="title-page">
+        <div class="title-content">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 1rem;">
+                <svg width="60" height="60" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM29.2 20.18C29.2 24.66 25.66 28.2 21.18 28.2H12.8V11.8H21.18C25.66 11.8 29.2 15.34 29.2 19.82V20.18Z" fill="#4285F4"/>
+                    <path d="M12.8 11.8V28.2H21.18C25.66 28.2 29.2 24.66 29.2 20.18V19.82C29.2 15.34 25.66 11.8 21.18 11.8H12.8Z" fill="#34A853"/>
+                    <path d="M12.8 11.8L21.18 11.8C25.66 11.8 29.2 15.34 29.2 19.82V20.18C29.2 24.66 25.66 28.2 21.18 28.2L12.8 28.2V11.8Z" fill="#FBBC05"/>
+                    <path d="M12.8 11.8V28.2H7.6C3.12 28.2 -0.42 24.66 -0.42 20.18V19.82C-0.42 15.34 3.12 11.8 7.6 11.8H12.8Z" fill="#EA4335"/>
                 </svg>
-                <p style="margin: 0.5rem 0 0 0;">向下滚动</p>
+                <h1 style="margin:0; color: var(--text-color); font-size: 2.5rem; font-weight: 500;">词测&练习分析工具 V3.1</h1>
             </div>
+            <p style="color: var(--secondary-text); font-size: 1.2rem; margin-bottom: 2rem;">分析学生词汇测试和练习数据</p>
+            <button onclick="scrollToContent()" style="pointer-events: auto; background: var(--primary-color); color: white; border: none; padding: 0.8rem 2rem; border-radius: 4px; font-size: 1rem; cursor: pointer; transition: all 0.2s ease;">开始使用</button>
         </div>
-
-        <div class="main-content">
-        """, unsafe_allow_html=True)
+        <div class="scroll-prompt" onclick="scrollToContent()" style="pointer-events: auto; cursor: pointer;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10L12 15L17 10H7Z" fill="var(--secondary-text)"/>
+            </svg>
+            <p style="margin: 0.5rem 0 0 0;">向下滚动</p>
+        </div>
+    </div>
+    
+    <div class="main-content">
+    """, unsafe_allow_html=True)
+    
+    # Main content starts here
+    st.markdown("""
+    <div class="header">
+        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 0C8.96 0 0 8.96 0 20C0 31.04 8.96 40 20 40C31.04 40 40 31.04 40 20C40 8.96 31.04 0 20 0ZM29.2 20.18C29.2 24.66 25.66 28.2 21.18 28.2H12.8V11.8H21.18C25.66 11.8 29.2 15.34 29.2 19.82V20.18Z" fill="#4285F4"/>
+                <path d="M12.8 11.8V28.2H21.18C25.66 28.2 29.2 24.66 29.2 20.18V19.82C29.2 15.34 25.66 11.8 21.18 11.8H12.8Z" fill="#34A853"/>
+                <path d="M12.8 11.8L21.18 11.8C25.66 11.8 29.2 15.34 29.2 19.82V20.18C29.2 24.66 25.66 28.2 21.18 28.2L12.8 28.2V11.8Z" fill="#FBBC05"/>
+                <path d="M12.8 11.8V28.2H7.6C3.12 28.2 -0.42 24.66 -0.42 20.18V19.82C-0.42 15.34 3.12 11.8 7.6 11.8H12.8Z" fill="#EA4335"/>
+            </svg>
+            <h1 style="margin:0; color: var(--text-color); font-weight: 500;">词测&练习分析工具 V3.1</h1>
+        </div>
+        <p style="margin:0; color: var(--secondary-text);">分析学生词汇测试和练习数据</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     with st.expander("📥 粘贴Study系统上班级学习动态", expanded=True):
         input_data = st.text_area(
@@ -562,22 +603,6 @@ def main():
         
         html("""
         <script>
-        function createConfetti() {
-            const colors = ['#4285F4', '#34A853', '#FBBC05', '#EA4335', '#8AB4F8'];
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.width = (Math.random() * 8 + 4) + 'px';
-                confetti.style.height = confetti.style.width;
-                confetti.style.borderRadius = '50%';
-                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
-                document.body.appendChild(confetti);
-                setTimeout(() => confetti.remove(), 5000);
-            }
-        }
         createConfetti();
         </script>
         """)
@@ -650,7 +675,8 @@ def main():
         st.markdown("---")
         with st.expander("📤 导出结果", expanded=False):
             export_options(results)
-            
+    
+    # Close the main-content div
     st.markdown("</div>", unsafe_allow_html=True)
 
 if __name__ == "__main__":
