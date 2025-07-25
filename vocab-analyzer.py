@@ -396,7 +396,7 @@ def main():
             </svg>
             <h1 style="margin:0; color: var(--text-color); font-weight: 500;">词测分析工具</h1>
         </div>
-        <p style="margin:0; color: var(--secondary-text);">可视化分析学生词汇测试和练习数据</p>
+        <p style="margin:0; color: var(--secondary-text);">分析学生词汇测试和练习数据</p>
     </div>
     """, unsafe_allow_html=True)
     
