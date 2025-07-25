@@ -12,4 +12,4 @@ pip install -r requirements.txt
 streamlit run vocab_web.py
 ```
 
-[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://yourusername-vocab-analyzer.streamlit.app/)
+[![Open in Streamlit](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://SteveJiBoi-vocab-analyzer.streamlit.app/)
