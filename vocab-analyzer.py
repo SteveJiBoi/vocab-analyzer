@@ -243,14 +243,33 @@ def add_share_button():
 
 访问链接: https://vocab-analyzer-jzdxphf8ukukuvbmhpwvam.streamlit.app/"""
 
-    # Use Streamlit's built-in components instead of raw html()
     if st.button("↗️ 分享工具", help="复制工具链接和功能介绍"):
         js = f"""
         <script>
-            function copyToClipboard() {{
-                navigator.clipboard.writeText(`{share_text}`)
-                    .then(() => alert('分享信息已复制到剪贴板！\\n\\n' + `{share_text}`))
-                    .catch(() => alert('复制失败，请手动复制。'));
+            async function copyToClipboard() {{
+                try {{
+                    // First clear the clipboard
+                    await navigator.clipboard.writeText('');
+                    
+                    // Then write our new content
+                    await navigator.clipboard.writeText(`{share_text}`);
+                    
+                    // Show success message
+                    alert('分享信息已复制到剪贴板！\\n\\n' + `{share_text}`);
+                }} catch (err) {{
+                    // Fallback method if Clipboard API fails
+                    try {{
+                        const textarea = document.createElement('textarea');
+                        textarea.value = `{share_text}`;
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                        alert('分享信息已复制到剪贴板！\\n\\n' + `{share_text}`);
+                    }} catch (err) {{
+                        alert('复制失败，请手动复制。\\n错误: ' + err.message);
+                    }}
+                }}
             }}
             copyToClipboard();
         </script>
